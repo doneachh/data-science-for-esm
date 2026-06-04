@@ -12,24 +12,38 @@ permissions:
   contents: write
   statuses: write
   actions: write
-  checks: read 
+  checks: read
 
 # This job installs dependencies, build the book, and pushes it to `gh-pages`
 jobs:
   build-and-deploy-book:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
 
     # Install dependencies
-    - name: Setup Python
-      uses: actions/setup-python@v4
+    - uses: conda-incubator/setup-miniconda@v3
       with:
-        python-version: '3.11'
-        cache: 'pip' # caching pip dependencies
+        miniforge-version: latest
+        activate-environment: esm-ws-24-25
+        channel-priority: strict
 
-    - name: Install environment with pip
-      run: pip install -r requirements.txt
+    - name: Cache Conda env
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.CONDA }}/envs
+        key: conda-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles(format('{0}', env.env_file)) }}
+      id: cache-env
+
+    - name: Update environment
+      run: |
+        conda env update -n esm-ws-24-25 -f environment.yaml
+        echo "Run conda list" && conda list
 
     # Build the book
     - name: Build the book
