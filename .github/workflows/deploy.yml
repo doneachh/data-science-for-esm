@@ -48,7 +48,8 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        cd data-science-for-esm && jupyter-book build .        
+        cd data-science-for-esm
+        python -m jupyter_book build .    
 
     # Deploy the book's HTML to gh-pages branch
     - name: GitHub Pages action
