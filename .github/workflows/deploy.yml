@@ -48,7 +48,7 @@ jobs:
     # Build the book
     - name: Build the book
       run: |
-        python -m jupyter_book build data-science-for-esm/ --toc data-science-for-esm/_toc.yml --config data-science-for-esm/_config.yml.    
+        jupyter-book build data-science-for-esm
 
     # Deploy the book's HTML to gh-pages branch
     - name: GitHub Pages action
