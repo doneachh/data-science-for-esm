@@ -24,7 +24,7 @@ jobs:
         shell: bash -l {0}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v4 #change version
 
     # Install dependencies
     - uses: conda-incubator/setup-miniconda@v3
@@ -49,6 +49,9 @@ jobs:
     - name: Build the book
       run: |
         jupyter-book build data-science-for-esm
+
+    - name: Check build output exists    # add: catch missing output early
+      run: ls data-science-for-esm/_build/html
 
     # Deploy the book's HTML to gh-pages branch
     - name: GitHub Pages action
